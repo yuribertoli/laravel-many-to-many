@@ -1936,6 +1936,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'MyMain',
   data: function data() {
@@ -1946,20 +1948,22 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    getAxios: function getAxios(apiPage) {
+    getAxios: function getAxios(paginaCorrente) {
       var _this = this;
 
       axios.get('/api/posts', {
         params: {
-          'page': apiPage
-        }
+          'page': paginaCorrente //page rappresenta la pagina corrente e viene rilevato automaticamente dalla funzione paginate() nel controller API
+
+        } //passandolo poi come argomento del metodo getAxios posso andare a modificarne il valore
+
       }).then(function (response) {
         console.log(response);
         _this.posts = response.data.results.data; //salvo dentro la variabile i risultati della chiamata axios
 
-        _this.currentPage = response.data.results.current_page; //setto la pagina corrente, derivante
+        _this.currentPage = response.data.results.current_page; //setto la pagina corrente, derivante dalla paginate() nel controller API
 
-        _this.lastPage = response.data.results.last_page;
+        _this.lastPage = response.data.results.last_page; //setto l'ultima pagina disponibile, dato sempre derivante dalla paginate()
       });
     }
   },

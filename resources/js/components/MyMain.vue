@@ -17,6 +17,8 @@
 
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
+                    <!-- Al click cambio il valore della pagina corrente, se è uguale ad 1 o all'ultima pagina disponibile assegno la classe
+                    disabled che in Bootstrap disabilita il click -->
                     <li class="page-item" :class="(currentPage == 1)?'disabled':''" ><span class="page-link" @click="getAxios(currentPage - 1)">Precedente</span></li>
                     <li class="page-item" :class="(currentPage == lastPage)?'disabled':''"><span class="page-link" @click="getAxios(currentPage + 1)">Successivo</span></li>
                 </ul>
@@ -40,19 +42,19 @@ export default {
 
     methods: {
 
-        getAxios(apiPage){
+        getAxios(paginaCorrente){
             axios.get('/api/posts', {
                 params: {
-                    'page': apiPage
-                }   
+                    'page': paginaCorrente  //page rappresenta la pagina corrente e viene rilevato automaticamente dalla funzione paginate() nel controller API
+                }                           //passandolo poi come argomento del metodo getAxios posso andare a modificarne il valore
             })
             .then((response) => {
 
                 console.log(response);
 
                 this.posts = response.data.results.data; //salvo dentro la variabile i risultati della chiamata axios
-                this.currentPage = response.data.results.current_page; //setto la pagina corrente, derivante
-                this.lastPage = response.data.results.last_page;
+                this.currentPage = response.data.results.current_page; //setto la pagina corrente, derivante dalla paginate() nel controller API
+                this.lastPage = response.data.results.last_page;    //setto l'ultima pagina disponibile, dato sempre derivante dalla paginate()
             })
         }
     },

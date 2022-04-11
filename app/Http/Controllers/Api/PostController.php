@@ -14,9 +14,9 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::with(['category'])->get();
+        //$posts = Post::with(['category'])->get(); per passare anche i valori della tabella delle categorie
 
-        $posts = Post::paginate(2);
+        $posts = Post::paginate(2); //per avere solo 2 elementi per pagina
 
         return response()->json(
             [
