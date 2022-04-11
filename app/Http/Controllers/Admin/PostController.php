@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Post;
+use App\Tag;
 use App\Category;
 use Illuminate\Support\Str;
 
@@ -29,8 +30,9 @@ class PostController extends Controller
     public function create()
     {
         $categories = Category::all();
+        $tags = Tag::all();
 
-        return view('admin.posts.create', compact('categories'));
+        return view('admin.posts.create', compact('categories', 'tags'));
     }
 
     /**
@@ -44,6 +46,8 @@ class PostController extends Controller
         $request->validate([
             'title' => 'required|min:5',
             'content' => 'required|min:10',
+            'category_id' => 'nullable|exists:categories,id',
+            'tags' => 'nullable|exists:tags,id'
         ]);
 
         $data = $request->all();
@@ -63,7 +67,7 @@ class PostController extends Controller
         $post = new Post();
         $post->fill($data);
         $post->save();
-
+        $post->tags()->sync($data['tags']);
         return redirect()->route('admin.posts.index');
         
     }
@@ -88,8 +92,9 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         $categories = Category::all();
+        $tags = Tag::all();
 
-        return view('admin.posts.edit', compact('post', 'categories'));
+        return view('admin.posts.edit', compact('post', 'categories', 'tags'));
     }
 
     /**
@@ -104,7 +109,9 @@ class PostController extends Controller
         $request->validate(
             [
                 'title' => 'required|min:5',
-                'content' => 'required|min:10'
+                'content' => 'required|min:10',
+                'category_id' => 'nullable|exists:categories,id',
+                'tags' => 'nullable|exists:tags,id'
             ]
         );
 
@@ -123,6 +130,7 @@ class PostController extends Controller
 
         $post->update($data);
         $post->save();
+        $post->tags()->sync($data['tags']);
         return redirect()->route('admin.posts.show', ['post' => $post->id]);
 
     }

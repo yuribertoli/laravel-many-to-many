@@ -1,13 +1,17 @@
 <template>
   <div>
-      <h1>Work in progress</h1>
-      <h3>Torna a trovarci presto!</h3>
+      <MyMain/>
   </div>
 </template>
 
 <script>
+import MyMain from '../components/MyMain';
+
 export default {
-    name: 'App'
+    name: 'App',
+    components: {
+      MyMain
+    }
 }
 </script>
 
