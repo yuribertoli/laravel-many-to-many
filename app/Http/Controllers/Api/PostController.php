@@ -16,7 +16,7 @@ class PostController extends Controller
     {
         //$posts = Post::with(['category'])->get(); per passare anche i valori della tabella delle categorie
 
-        $posts = Post::paginate(2); //per avere solo 2 elementi per pagina
+        $posts = Post::simplePaginate(2); //per avere solo 2 elementi per pagina
 
         return response()->json(
             [
